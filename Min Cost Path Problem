@@ -63,7 +63,24 @@ def minCostPath(input, mRows, nCols) :
 	#Your code goes here
     return helper(mat, 0,0, mRows, nCols)
 
+#######################################################3
+using DP
+def helper(mat, r, c, mRows, nCols, dp):
+    if r >= mRows or c >= nCols:
+        return MAX_VALUE
+    if r == mRows-1 and c == nCols-1:
+        return mat[r][c]
+    a1 = helper(mat, r+1, c, mRows, nCols, dp)
+    a2 = helper(mat, r, c+1, mRows, nCols, dp)
+    a3 = helper(mat, r+1, c+1, mRows, nCols, dp)
+    dp[r][c] =  mat[r][c]+ min(a1,a2,a3)
+    return dp[r][c]
 
+def minCostPath(input, mRows, nCols) :
+	#Your code goes here
+    dp =[[MAX_VALUE]*nCols]*mRows
+    dp[0][0] = input[0][0]
+    return helper(mat, 0,0, mRows, nCols, dp)
 
 
 
