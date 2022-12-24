@@ -65,22 +65,42 @@ def minCostPath(input, mRows, nCols) :
 
 #######################################################3
 using DP
+from sys import stdin
+MAX_VALUE = 2147483647
+MIN_VALUE = -2147483647
 def helper(mat, r, c, mRows, nCols, dp):
     if r >= mRows or c >= nCols:
         return MAX_VALUE
     if r == mRows-1 and c == nCols-1:
         return mat[r][c]
-    a1 = helper(mat, r+1, c, mRows, nCols, dp)
-    a2 = helper(mat, r, c+1, mRows, nCols, dp)
-    a3 = helper(mat, r+1, c+1, mRows, nCols, dp)
-    dp[r][c] =  mat[r][c]+ min(a1,a2,a3)
+    a1 = MAX_VALUE
+    a2 = MAX_VALUE
+    a3 = MAX_VALUE
+
+    if dp[r+1][c] == MIN_VALUE:
+        a1 = helper(mat, r+1, c, mRows, nCols, dp)
+        dp[r+1][c] = a1
+    else:
+        a1 = dp[r+1][c]
+    if dp[r][c+1] == MIN_VALUE:
+        a2 = helper(mat, r, c+1, mRows, nCols, dp)
+        dp[r][c+1] = a2
+    else:
+        a2 = dp[r][c+1]
+    if dp[r+1][c+1] == MIN_VALUE:
+        a3 = helper(mat, r+1, c+1, mRows, nCols, dp)
+        dp[r+1][c+1] = a3
+    else:
+        a3 = dp[r+1][c+1]
+    dp[r][c] =  mat[r][c] + min(a1,a2,a3)
     return dp[r][c]
 
 def minCostPath(input, mRows, nCols) :
 	#Your code goes here
-    dp =[[MAX_VALUE]*nCols]*mRows
-    dp[0][0] = input[0][0]
+    dp =[[MIN_VALUE for col in range(nCols+1)]for row in range(mRows+1)]
+    # dp[0][0] = input[0][0]
     return helper(mat, 0,0, mRows, nCols, dp)
+
 
 
 
