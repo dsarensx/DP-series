@@ -1,0 +1,83 @@
+Edit Distance
+Send Feedback
+You are given two strings S and T of lengths M and N, respectively. Find the 'Edit Distance' between the strings.
+Edit Distance of two strings is the minimum number of steps required to make one string equal to the other. In order to do so, you can perform the following three operations:
+1. Delete a character
+2. Replace a character with another one
+3. Insert a character
+Note :
+Strings don't contain spaces in between.
+ Input format :
+The first line of input contains the string S of length M.
+
+The second line of the input contains the String T of length N.
+Output format :
+Print the minimum 'Edit Distance' between the strings.
+Constraints :
+0 <= M <= 10 ^ 3
+0 <= N <= 10 ^ 3
+
+Time Limit: 1 sec
+Sample Input 1 :
+abc
+dc
+Sample Output 1 :
+2
+ Explanation to the Sample Input 1 :
+ In 2 operations we can make string T to look like string S.
+First, insert character 'a' to string T, which makes it "adc".
+
+And secondly, replace the character 'd' of string T with 'b' from the string S. This would make string T as "abc" which is also string S. 
+
+Hence, the minimum distance.
+Sample Input 2 :
+whgtdwhgtdg
+aswcfg
+Sample Output 2 :
+9
+
+
+
+from sys import stdin
+
+def helper(s, t, dp):
+	if len(s) == 0:
+		return len(t)
+	if len(t) == 0:
+		return len(s)
+	
+	i = len(s)
+	j = len(t)
+	if dp[i][j] != -1:
+		return dp[i][j]
+	if s[0] == t[0]:
+		smallans = helper(s[1:], t[1:], dp)
+		# dp[i-1][j-1] = smallans
+		dp[i][j] = smallans
+	else:
+		a1 = helper(s[1:], t, dp)
+		dp[i-1][j] = a1
+
+		a2 = helper(s, t[1:], dp)
+		dp[i][j-1] = a2
+
+		a3 = helper(s[1:], t[1:], dp)
+		dp[i-1][j-1] = a3
+
+		dp[i][j] = 1+min(a1,a2,a3)
+	return dp[i][j]
+
+def editDistance(s, t) :
+	#Your code goes here
+	dp = [[-1 for col in range(len(t)+1)] for row in range(len(s)+1)]
+	return helper(s, t, dp)
+
+
+
+
+
+#main
+s = str(stdin.readline().rstrip())
+t = str(stdin.readline().rstrip())
+
+print(editDistance(s, t))
