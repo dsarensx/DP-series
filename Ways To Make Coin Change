@@ -1,0 +1,60 @@
+Ways To Make Coin Change
+Send Feedback
+For the given infinite supply of coins of each of denominations, D = {D0, D1, D2, D3, ...... Dn-1}. You need to figure out the total number of ways W, in which you can make the change for Value V using coins of denominations D.
+Return 0 if the change isn't possible.
+Input Format
+The first line of the input contains an integer value N, which denotes the total number of denominations.
+
+The second line of input contains N values, separated by a single space. These values denote the value of denomination.
+
+The third line of the input contains an integer value, that denotes the value of V.
+Output Format
+Print the total total number of ways i.e. W.
+Constraints :
+1 <= n <= 10
+1 <= V <= 1000
+
+Time Limit: 1sec
+Sample Input 1 :
+3
+1 2 3
+4
+Sample Output 1 :
+4
+Explanation to Sample Input 1 :
+Number of ways are - 4 total i.e. (1,1,1,1), (1,1, 2), (1, 3) and (2, 2).
+Sample Input 2 :
+6
+1 2 3 4 5 6
+250
+Sample Output 2 :
+13868903
+
+from sys import stdin
+import sys
+sys.setrecursionlimit(10**6)
+def helper(arr, n, t, dp):
+    if n == 0:
+        return (t%arr[0] == 0)
+    if dp[n][t] !=0:
+        return dp[n][t]
+    notake = helper(arr, n-1,t, dp)
+    take = 0
+    if arr[n] <= t :
+        take = helper(arr,n, t-arr[n], dp)
+    dp[n][t] =notake + take
+    return dp[n][t]
+
+def waysToMakeCoinChange(denominations, numDenominations, value): 
+    n=len(denominations)
+    dp=[[0 for col in range(value+1)]for row in range(n)]
+    return helper(denominations, numDenominations-1, value, dp)
+
+
+
+# Main
+numDenominations = int(stdin.readline().rstrip())
+denominations = [int(elem) for elem in list(stdin.readline().rstrip().rsplit())]
+value = int(input().strip())
+
+print(waysToMakeCoinChange(denominations,numDenominations, value))
